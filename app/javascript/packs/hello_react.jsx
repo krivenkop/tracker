@@ -23,4 +23,12 @@ document.addEventListener('DOMContentLoaded', () => {
     <Hello name="React" />,
     document.body.appendChild(document.createElement('div')),
   )
-})
+
+  // Hot reload API
+  if (module.hot) {
+    module.hot.accept('../app', () => {
+      const NextApp = require('../app').default
+      renderComponent(NextApp)
+    })
+  }
+});
