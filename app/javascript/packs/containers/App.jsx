@@ -1,14 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Guest from './Guest';
+
 class App extends React.Component {
-  render = () => (
-    <h1>Hello world</h1>
-  );
+  render = () => <Guest />;
 }
 
 function mapStateToProps(state) {
-  return {};
+  return {
+    user: state.user,
+  };
 }
 
 export default connect(mapStateToProps)(App);
