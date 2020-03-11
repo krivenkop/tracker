@@ -1,4 +1,3 @@
 class ApplicationController < ActionController::Base
-  def index
-  end
+  respond_to :json
 end

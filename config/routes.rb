@@ -12,6 +12,6 @@ Rails.application.routes.draw do
   end
 
 
-  root to: 'application#index'
-  get '*path' => 'application#index'
+  root to: 'static#home'
+  get '*path' => 'static#home'
 end
