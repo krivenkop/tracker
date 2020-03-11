@@ -7,16 +7,16 @@ import {
 
 import Header from '../components/Header';
 import Login from '../components/pages/Login';
+import Register from '../components/pages/Register';
 
 class Guest extends React.Component {
-  render = store => (
+  render = (store) => (
     <Router>
       <Header />
 
       <Switch>
-        <Route path="/">
-          <Login/>
-        </Route>
+        <Route path="/register" component={Register} />
+        <Route path="/" component={Login} />
       </Switch>
     </Router>
   );

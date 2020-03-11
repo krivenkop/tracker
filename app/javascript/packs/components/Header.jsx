@@ -12,6 +12,9 @@ export default () => (
             <li className="mnu__item">
               <Link to="/" className="mnu__link">Login</Link>
             </li>
+            <li className="mnu__item">
+              <Link to="/register" className="mnu__link">Register</Link>
+            </li>
           </nav>
         </div>
       </div>
