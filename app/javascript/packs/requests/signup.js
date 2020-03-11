@@ -6,9 +6,11 @@ export default async (data) => {
   const { email, password, passwordConfirmation } = data;
 
   return axios.post('/signup', {
-    email,
-    password,
-    password_confirmation: passwordConfirmation,
+    user: {
+      email,
+      password,
+      password_confirmation: passwordConfirmation,
+    },
   }, {
     headers: {
       'X-CSRF-Token': authToken(),
