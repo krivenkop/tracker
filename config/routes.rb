@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users,
              path: '',
-             path_names: {
-                 registration: 'signup'
-             },
              skip: [:sessions, :registration],
              defaults: { format: :json }
   as :user do
