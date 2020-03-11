@@ -9,6 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <Provider store={configureStore()}>
       <App />
     </Provider>,
-    document.body.appendChild(document.createElement('div')),
+    document.querySelector('.application'),
   );
 });
