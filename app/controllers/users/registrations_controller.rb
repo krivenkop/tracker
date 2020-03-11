@@ -3,10 +3,10 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
-  def create
-    build_resource(sign_up_params)
+  before_filter :set_default_response_format
 
-    resource.save
-    render_resource(resource)
+  private
+  def set_default_response_format
+    request.format = :json
   end
 end
