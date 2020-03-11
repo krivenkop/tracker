@@ -10,16 +10,22 @@ import Login from '../components/pages/Login';
 import Register from '../components/pages/Register';
 
 class Guest extends React.Component {
-  render = (store) => (
+  render = (props) => (
     <Router>
       <Header />
 
       <Switch>
-        <Route path="/register" component={Register} />
+        <Route path="/register">
+          <Register addNotification={this.addNotification} />
+        </Route>
         <Route path="/" component={Login} />
       </Switch>
     </Router>
   );
+
+  addNotification = (text) => {
+    console.log(text);
+  }
 }
 
 export default Guest;
