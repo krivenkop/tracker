@@ -7,11 +7,11 @@ export default () => {
 
   return (
     <div className="login-form__wrapper">
-      <form action="/login" className="login-form" onSubmit={processSubmit}>
+      <form action="#" className="login-form" onSubmit={processSubmit}>
         <h1 className="login-form__title">Login</h1>
 
         <div className="form__group">
-          <label htmlFor="username" className="form__label">Username</label>
+          <label htmlFor="username" className="form__label">Email</label>
           <input type="text" className="login-form__username form__string"
                  name="username" id="username" />
         </div>
@@ -23,7 +23,7 @@ export default () => {
         </div>
 
         <div className="d-flex justify-content-center">
-          <button className="login-form__submit form__submit">Войти</button>
+          <button className="login-form__submit form__submit">Log in</button>
         </div>
       </form>
     </div>
