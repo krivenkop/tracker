@@ -14,7 +14,7 @@ export default (props) => {
   const [passwordConfirmation, setPasswordConfirmation] = useState(defaultInputState);
 
   const emailValidator = new Validator('email');
-  const passwordValidator = new Validator('required');
+  const passwordValidator = new Validator('required|minLength:6|maxLength:20');
   const passwordConfirmationValidator = new Validator('required');
 
   const inputErrorClass = 'form__string--error';
