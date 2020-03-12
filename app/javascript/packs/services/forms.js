@@ -16,25 +16,27 @@ export default class {
   }
 
   static isInputsAllValid = (inputs) => {
+    let result = true;
     // eslint-disable-next-line consistent-return
     inputs.forEach((input) => {
       if (this.isInputInvalid(input)) {
-        return false;
+        result = false;
       }
     });
 
-    return true;
+    return result;
   }
 
   static isInputsAnyInvalid = (inputs) => {
+    let result = false;
     // eslint-disable-next-line consistent-return
     inputs.forEach((input) => {
       if (this.isInputInvalid(input)) {
-        return true;
+        result = true;
       }
     });
 
-    return false;
+    return result;
   }
 
   static updateValue = (value, inputData, setter) => {
@@ -50,7 +52,7 @@ export default class {
   // eslint-disable-next-line class-methods-use-this
   static get defaultInputState() {
     return {
-      value: '', valid: true, errors: [], touched: false,
+      value: '', valid: false, errors: [], touched: false,
     };
   }
 
