@@ -13,7 +13,7 @@ export default class {
       required,
       passwordMatch,
       minLength,
-      maxLength
+      maxLength,
     };
   }
 
