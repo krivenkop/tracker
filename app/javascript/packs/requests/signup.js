@@ -5,7 +5,7 @@ import authToken from '../services/authenticityToken';
 export default async (data) => {
   const { email, password, passwordConfirmation } = data;
 
-  return axios.post('/signup', {
+  return axios.post('/signup.json', {
     user: {
       email,
       password,

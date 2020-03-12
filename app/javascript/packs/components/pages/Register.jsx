@@ -52,8 +52,8 @@ export default (props) => {
   const processSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isInputValid(email) || isInputValid(password)
-        || isInputValid(passwordConfirmation)) {
+    if (!isInputValid(email) || !isInputValid(password)
+        || !isInputValid(passwordConfirmation)) {
       validateEmail();
       validatePassword();
       validatePasswordConfirmation();
@@ -62,9 +62,9 @@ export default (props) => {
     }
 
     const res = await signupRequest({
-      email,
-      password,
-      passwordConfirmation,
+      email: email.value,
+      password: password.value,
+      passwordConfirmation: passwordConfirmation.value,
     });
 
     if (!res.data.errors) {
