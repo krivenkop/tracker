@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import signupRequest from '../../requests/signup';
 import Validator from '../../validators/validator';
+import sluggify from '../../services/sluggify';
 
 export default (props) => {
   const defaultInputState = {
@@ -17,6 +18,8 @@ export default (props) => {
   const passwordConfirmationValidator = new Validator('required');
 
   const inputErrorClass = 'form__string--error';
+
+  const successMessage = 'You have registered successful! <br> Try to login';
 
   const validateEmail = () => {
     const { valid, errors } = emailValidator.validate(email.value, 'email');
@@ -49,8 +52,8 @@ export default (props) => {
   const processSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isInputValid(email) || isInputValid(password)
-        || isInputValid(passwordConfirmation)) {
+    if (!isInputValid(email) || !isInputValid(password)
+        || !isInputValid(passwordConfirmation)) {
       validateEmail();
       validatePassword();
       validatePasswordConfirmation();
@@ -59,13 +62,16 @@ export default (props) => {
     }
 
     const res = await signupRequest({
-      email,
-      password,
-      passwordConfirmation,
+      email: email.value,
+      password: password.value,
+      passwordConfirmation: passwordConfirmation.value,
     });
 
     if (!res.data.errors) {
-      props.addNotification('You have registered successful! <br> Try to login');
+      props.addNotification({
+        title: successMessage,
+        slug: sluggify(successMessage),
+      });
     }
   };
 
