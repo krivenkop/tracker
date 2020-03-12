@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export default (props) => {
   return (
@@ -7,8 +7,6 @@ export default (props) => {
          key={props.index} onClick={() => {
            props.closeNotification(props.notification.slug);
          }
-    }>
-      {props.notification.title}
-    </div>
+    } dangerouslySetInnerHTML={{ __html: props.notification.title }} />
   );
 };
