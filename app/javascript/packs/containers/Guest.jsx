@@ -10,22 +10,19 @@ import Login from '../components/pages/Login';
 import Register from '../components/pages/Register';
 
 class Guest extends React.Component {
-  render = (props) => (
-    <Router>
-      <Header />
+  render = () => {
+    window.addNotification = this.props.addNotification;
+    return (<Router>
+      <Header/>
 
       <Switch>
         <Route path="/register">
-          <Register addNotification={this.addNotification} />
+          <Register addNotification={this.props.addNotification}/>
         </Route>
-        <Route path="/" component={Login} />
+        <Route path="/" component={Login}/>
       </Switch>
-    </Router>
-  );
-
-  addNotification = (text) => {
-    console.log(text);
-  }
+    </Router>);
+  };
 }
 
 export default Guest;
