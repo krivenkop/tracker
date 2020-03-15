@@ -8,11 +8,17 @@ import {
   removeNotification,
   setHiding,
 } from '../actions/notifications';
+import {
+  updateAccessToken,
+  updateRefreshToken,
+  updateJWTPayload,
+} from '../actions/auth';
 
 class App extends React.Component {
   render = () => (
     <div className="h-100">
-      <Guest addNotification={this.props.notificationsActions.addNotification}/>
+      <Guest addNotification={this.props.notificationsActions.addNotification}
+            authActions={this.props.authActions}/>
       <Notifications notifications={this.props.notifications.list}
                      actions={this.props.notificationsActions}/>
     </div>
@@ -37,6 +43,17 @@ const mapDispatchToProps = (dispatch) => {
       },
       setHiding: (payload) => {
         dispatch(setHiding(payload));
+      },
+    },
+    authActions: {
+      updateAccessToken: (payload) => {
+        dispatch(updateAccessToken(payload));
+      },
+      updateRefreshToken: (payload) => {
+        dispatch(updateRefreshToken(payload));
+      },
+      updateUserPayload: (payload) => {
+        dispatch(updateJWTPayload(payload));
       },
     },
   };
