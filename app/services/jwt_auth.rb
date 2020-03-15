@@ -40,7 +40,7 @@ class JwtAuth
         access: access_token({ user: user.as_json }),
         refresh: {
             token: refresh_token.token,
-            expires_on: refresh_token.expires_on
+            expires_on: refresh_token.expires_on.to_i
         }
     }
   end
