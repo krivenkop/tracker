@@ -20,14 +20,21 @@ RSpec.describe Users::SessionsController, type: :request do
         expect(RefreshToken.count).to eq tokens_count + 1
       end
 
-      it 'returns logged in user object', post_login: true do
+      it 'returns right jwt access token', post_login: true do
+        jwt_auth = JwtAuth.new(
+            secret: Rails.application.credentials.secret_key_base,
+            refresh_lifetime: 48.hours,
+            access_lifetime: 30.minutes
+        )
+        valid_access_token = jwt_auth.access_token({ user: user.as_json })
+
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)['payload']['user']['email']).to eq user.email
+        expect(JSON.parse(response.body)['access']).to eq valid_access_token
       end
 
       it 'returns access and refresh tokens', post_login: true do
-        expect(JSON.parse(response.body)['jwt']['refresh']).not_to be_empty
-        expect(JSON.parse(response.body)['jwt']['access']).not_to be_empty
+        expect(JSON.parse(response.body)['refresh']).not_to be_empty
+        expect(JSON.parse(response.body)['access']).not_to be_empty
       end
     end
 
