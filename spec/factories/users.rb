@@ -21,8 +21,14 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+
+FactoryBot.define do
+  factory :user do
+    password { '12345678' }
+    password_confirmation { '12345678' }
+
+    sequence :email do |n|
+      "person#{n}@example.com"
+    end
+  end
+end
