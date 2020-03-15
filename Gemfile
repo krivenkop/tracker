@@ -28,6 +28,8 @@ gem 'devise-jwt', '~> 0.5.9'
 
 gem 'dry-configurable', '0.9.0'
 
+gem 'jwt'
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
