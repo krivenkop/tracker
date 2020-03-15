@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   respond_to :json
 
   def create
-    unless authenticate(user_params)
+    unless verify_user_data(user_params)
       render json: { success: false }, status: :forbidden
       return
     end
@@ -15,22 +15,12 @@ class Users::SessionsController < Devise::SessionsController
         refresh_lifetime: 48.hours,
         access_lifetime: 30.minutes
     )
-    tokens = jwt_auth.authenticate(@user)
-
-    response = {
-        jwt: {
-            access: tokens[:access],
-            refresh: tokens[:refresh]
-        },
-        payload: { user: @user }
-    }
-
-    render json: response
+    render json: jwt_auth.authenticate(@user)
   end
 
   private
 
-  def authenticate(data)
+  def verify_user_data(data)
     @user = User.find_by(email: data[:email])
     return false if @user.nil?
 

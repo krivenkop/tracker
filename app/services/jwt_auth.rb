@@ -21,7 +21,12 @@ class JwtAuth
   end
 
   def access_token(payload)
-    JWT.encode payload, secret, algorithm
+    JWT.encode(
+        payload,
+        secret,
+        algorithm,
+        { exp: (Time.now + @access_lifetime).to_i }
+    )
   end
 
   def authenticate(user)
@@ -32,10 +37,7 @@ class JwtAuth
     })
 
     {
-        access: {
-            token: access_token(user),
-            expires_on: Time.now + @access_lifetime
-        },
+        access: access_token({ user: user.as_json }),
         refresh: {
             token: refresh_token.token,
             expires_on: refresh_token.expires_on
