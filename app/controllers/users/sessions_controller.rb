@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 
-class Users::SessionsController < Devise::SessionsController
-  respond_to :json
+class Users::SessionsController < ApiController
+  include ActionController::MimeResponds
+
+  before_action :check_refresh_token, only: [:update_access_token, :destroy]
 
   def create
     unless verify_user_data(user_params)
-      render json: { success: false }, status: :forbidden
+      head :forbidden
       return
     end
 
@@ -15,17 +17,19 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def update_access_token
-    refresh_token = RefreshToken.find_by(token: refresh_token_params[:refresh_token])
-
-    render json: { success: false }, status: :forbidden and return if refresh_token.nil?
-    render json: { success: false }, status: :unauthorized and return if refresh_token.expired?
+    head :unauthorized and return if @refresh_token.expired?
 
     jwt_auth = JwtAuth.create
     response = {
-        access: jwt_auth.access_token({ user: refresh_token.user.as_json })
+        access: jwt_auth.access_token({ user: @refresh_token.user.as_json })
     }
 
     render json: response
+  end
+
+  def destroy
+    @refresh_token.destroy
+    head :ok
   end
 
   private
@@ -43,5 +47,15 @@ class Users::SessionsController < Devise::SessionsController
 
   def refresh_token_params
     params.permit(:refresh_token)
+  end
+
+  def check_refresh_token
+    if refresh_token_params[:refresh_token].nil?
+      head :forbidden
+      return
+    end
+
+    @refresh_token = RefreshToken.find_by(token: refresh_token_params[:refresh_token])
+    head :forbidden if @refresh_token.nil?
   end
 end
