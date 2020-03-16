@@ -20,11 +20,18 @@ class JwtAuth
     @algorithm = 'HS256'
   end
 
+  # @return [JwtAuth]
+  def self.create
+    self.new(
+        secret: Rails.application.credentials.secret_key_base,
+        refresh_lifetime: 48.hours,
+        access_lifetime: 30.minutes
+    )
+  end
+
   def access_token(payload)
     JWT.encode(
-        payload,
-        secret,
-        algorithm,
+        payload, secret, algorithm,
         { exp: (Time.now + @access_lifetime).to_i }
     )
   end

@@ -17,6 +17,12 @@ class RefreshToken < ApplicationRecord
 
   belongs_to :user
 
+  def expired?
+    return true if expires_on < Time.now
+
+    false
+  end
+
   private
 
   def expires_on_more_than_now

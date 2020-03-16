@@ -10,12 +10,22 @@ class Users::SessionsController < Devise::SessionsController
       return
     end
 
-    jwt_auth = JwtAuth.new(
-        secret: Rails.application.credentials.secret_key_base,
-        refresh_lifetime: 48.hours,
-        access_lifetime: 30.minutes
-    )
+    jwt_auth = JwtAuth.create
     render json: jwt_auth.authenticate(@user)
+  end
+
+  def update_access_token
+    refresh_token = RefreshToken.find_by(token: refresh_token_params[:refresh_token])
+
+    render json: { success: false }, status: :forbidden and return if refresh_token.nil?
+    render json: { success: false }, status: :unauthorized and return if refresh_token.expired?
+
+    jwt_auth = JwtAuth.create
+    response = {
+        access: jwt_auth.access_token({ user: refresh_token.user.as_json })
+    }
+
+    render json: response
   end
 
   private
@@ -29,5 +39,9 @@ class Users::SessionsController < Devise::SessionsController
 
   def user_params
     params.require(:user).permit(:email, :password)
+  end
+
+  def refresh_token_params
+    params.permit(:refresh_token)
   end
 end
