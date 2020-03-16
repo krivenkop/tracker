@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     post "/login" => "users/sessions#create", :as => :user_session
     post "/update-access-token" => "users/sessions#update_access_token", :as => :update_access_token
     delete "/logout" => "users/sessions#destroy", :as => :destroy_user_session
+    post "/verify-access-token" => "users/sessions#verify_access_token", :as => :verify_access_token
     post "/signup" => "users/registrations#create"
   end
 

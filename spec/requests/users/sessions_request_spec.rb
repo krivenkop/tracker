@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'securerandom'
 
 RSpec.describe Users::SessionsController, type: :request do
 
@@ -22,7 +23,7 @@ RSpec.describe Users::SessionsController, type: :request do
 
       it 'returns right jwt access token', post_login: true do
         jwt_auth = JwtAuth.create
-        valid_access_token = jwt_auth.access_token({ user: user.as_json })
+        valid_access_token = jwt_auth.access_token({ user: user.reload.as_json })
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)['access']).to eq valid_access_token
@@ -51,8 +52,8 @@ RSpec.describe Users::SessionsController, type: :request do
   describe 'POST /update-access-token' do
     let(:user) { create :user }
 
-    context 'refresh token is valid' do
-      context 'refresh token is not expired' do
+    context 'when refresh token is valid' do
+      context 'when refresh token is not expired' do
         let(:refresh_token) { create :refresh_token }
         before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
 
@@ -64,7 +65,7 @@ RSpec.describe Users::SessionsController, type: :request do
         end
       end
 
-      context 'refresh token is expired' do
+      context 'when refresh token is expired' do
         let(:refresh_token) { create :refresh_token, :skips_validations, :expires_on_now }
         before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
 
@@ -83,4 +84,53 @@ RSpec.describe Users::SessionsController, type: :request do
     end
   end
 
+  describe 'DELETE /logout' do
+    context 'when refresh token is valid' do
+      let!(:refresh_token) { create :refresh_token }
+      RSpec.configure do |config|
+        config.before(:each, :destroy_request => true) do
+          delete destroy_user_session_url, params: { refresh_token: refresh_token.token }
+        end
+      end
+
+      it 'should remove refresh token from db' do
+        refresh_count = RefreshToken.count
+        delete destroy_user_session_url, params: { refresh_token: refresh_token.token }
+        expect(RefreshToken.count).to eq(refresh_count - 1)
+      end
+
+      it 'should return status 200', destroy_request: true do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'when refresh token is invalid' do
+      before { post update_access_token_url, params: { refresh_token: 'invalid_refresh_token' } }
+
+      it 'should return forbidden error' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe 'POST /verify-access-token' do
+    let(:user) { create :user }
+
+    context 'when access token is invalid' do
+      before { post verify_access_token_url, params: { access_token: 'invalid_access_token' } }
+
+      it 'should return unauthorized error' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when access token is valid' do
+      let(:access_token) { JwtAuth.create.access_token({ user: user }) }
+
+      it 'should return status 200' do
+        post verify_access_token_url, params: { access_token: access_token }
+        expect(response).to have_http_status(:ok)
+      end
+    end
+  end
 end
