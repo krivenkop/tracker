@@ -17,9 +17,12 @@ class Guest extends React.Component {
 
       <Switch>
         <Route path="/register">
-          <Register addNotification={this.props.addNotification}/>
+          <Register addNotification={this.props.addNotification} />
         </Route>
-        <Route path="/" component={Login}/>
+        <Route path="/">
+          <Login authActions={this.props.authActions}
+                 addNotification={this.props.addNotification} />
+        </Route>
       </Switch>
     </Router>);
   };

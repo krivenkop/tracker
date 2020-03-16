@@ -2,22 +2,17 @@ import React, { useState } from 'react';
 
 import signupRequest from '../../requests/signup';
 import Validator from '../../validators/validator';
+import FormsHelper from '../../services/forms';
 import sluggify from '../../services/sluggify';
 
 export default (props) => {
-  const defaultInputState = {
-    value: '', valid: true, errors: [], touched: false,
-  };
-
-  const [email, setEmail] = useState(defaultInputState);
-  const [password, setPassword] = useState(defaultInputState);
-  const [passwordConfirmation, setPasswordConfirmation] = useState(defaultInputState);
+  const [email, setEmail] = useState(FormsHelper.defaultInputState);
+  const [password, setPassword] = useState(FormsHelper.defaultInputState);
+  const [passwordConfirmation, setPasswordConfirmation] = useState(FormsHelper.defaultInputState);
 
   const emailValidator = new Validator('email');
-  const passwordValidator = new Validator('required');
+  const passwordValidator = new Validator('required|minLength:6|maxLength:20');
   const passwordConfirmationValidator = new Validator('required');
-
-  const inputErrorClass = 'form__string--error';
 
   const successMessage = 'You have registered successful! <br> Try to login';
 
@@ -39,21 +34,10 @@ export default (props) => {
     setPasswordConfirmation({ ...passwordConfirmation, valid, errors });
   };
 
-  const isInputValid = (input) => {
-    if (!input.valid && input.touched) return false;
-
-    return true;
-  };
-
-  const updateValue = (value, inputData, setter) => {
-    setter({ ...inputData, value, touched: true });
-  };
-
   const processSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isInputValid(email) || !isInputValid(password)
-        || !isInputValid(passwordConfirmation)) {
+    if (FormsHelper.isInputsAnyInvalid([email, password, passwordConfirmation])) {
       validateEmail();
       validatePassword();
       validatePasswordConfirmation();
@@ -83,9 +67,9 @@ export default (props) => {
         <div className="form__group">
           <label htmlFor="email" className="form__label">Email</label>
           <input type="text"
-                 className={`register-form__email form__string ${!isInputValid(email) ? inputErrorClass : ''}`}
+                 className={`register-form__email form__string ${FormsHelper.renderErrorClass(email)}`}
                  name="email" id="email" value={email.value} onBlur={validateEmail}
-                 onChange={(e) => updateValue(e.target.value, email, setEmail)}/>
+                 onChange={(e) => FormsHelper.updateValue(e.target.value, email, setEmail)}/>
           <div className="form__errors">
             {email.errors.map((el, index) => <p className="form__error" key={index}>{el}</p>)}
           </div>
@@ -94,9 +78,9 @@ export default (props) => {
         <div className="form__group">
           <label htmlFor="password" className="form__label">Password</label>
           <input type="password" onBlur={validatePassword}
-                 className={`register-form__password form__string ${!isInputValid(password) ? inputErrorClass : ''}`}
+                 className={`register-form__password form__string ${FormsHelper.renderErrorClass(password)}`}
                  name="password" id="password" value={password.value}
-                 onChange={(e) => updateValue(e.target.value, password, setPassword)}/>
+                 onChange={(e) => FormsHelper.updateValue(e.target.value, password, setPassword)}/>
           <div className="form__errors">
             {password.errors.map((el, index) => <p className="form__error" key={index}>{el}</p>)}
           </div>
@@ -106,11 +90,11 @@ export default (props) => {
           <label htmlFor="password" className="form__label">Password Confirmation</label>
           <input type="password"
                  className={`register-form__password-confirmation form__string 
-                 ${!isInputValid(passwordConfirmation) ? inputErrorClass : ''}`}
+                 ${FormsHelper.renderErrorClass(passwordConfirmation)}`}
                  onBlur={validatePasswordConfirmation}
                  name="password-confirmation" id="password-confirmation"
                  value={passwordConfirmation.value}
-                 onChange={(e) => updateValue(
+                 onChange={(e) => FormsHelper.updateValue(
                    e.target.value,
                    passwordConfirmation,
                    setPasswordConfirmation,

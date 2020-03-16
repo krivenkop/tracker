@@ -1,6 +1,8 @@
 import email from './email';
 import required from './required';
 import passwordMatch from './password-match';
+import minLength from './min-length';
+import maxLength from './max-length';
 
 export default class {
   constructor(rules) {
@@ -10,6 +12,8 @@ export default class {
       email,
       required,
       passwordMatch,
+      minLength,
+      maxLength,
     };
   }
 
