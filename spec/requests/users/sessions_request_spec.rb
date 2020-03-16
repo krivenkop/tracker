@@ -51,8 +51,8 @@ RSpec.describe Users::SessionsController, type: :request do
   describe 'POST /update-access-token' do
     let(:user) { create :user }
 
-    context 'refresh token is valid' do
-      context 'refresh token is not expired' do
+    context 'when refresh token is valid' do
+      context 'when refresh token is not expired' do
         let(:refresh_token) { create :refresh_token }
         before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
 
@@ -64,7 +64,7 @@ RSpec.describe Users::SessionsController, type: :request do
         end
       end
 
-      context 'refresh token is expired' do
+      context 'when refresh token is expired' do
         let(:refresh_token) { create :refresh_token, :skips_validations, :expires_on_now }
         before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
 
@@ -83,4 +83,32 @@ RSpec.describe Users::SessionsController, type: :request do
     end
   end
 
+  describe 'DELETE /logout' do
+    context 'when refresh token is valid' do
+      let!(:refresh_token) { create :refresh_token }
+      RSpec.configure do |config|
+        config.before(:each, :destroy_request => true) do
+          delete destroy_user_session_url, params: { refresh_token: refresh_token.token }
+        end
+      end
+
+      it 'should remove refresh token from db' do
+        refresh_count = RefreshToken.count
+        delete destroy_user_session_url, params: { refresh_token: refresh_token.token }
+        expect(RefreshToken.count).to eq(refresh_count - 1)
+      end
+
+      it 'should return status 200', destroy_request: true do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'when refresh token is invalid' do
+      before { post update_access_token_url, params: { refresh_token: 'invalid_refresh_token' } }
+
+      it 'should return forbidden error' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
 end
