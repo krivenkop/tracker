@@ -5,6 +5,7 @@ class ApiController < ActionController::API
 
   def authorize_jwt
     jwt_auth = JwtAuth.create
+    access_token_data = false
     begin
       access_token_data = jwt_auth.verify_access_token(params[:access_token])
     rescue JWT::DecodeError => e
