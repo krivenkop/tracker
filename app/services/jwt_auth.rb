@@ -62,7 +62,7 @@ class JwtAuth
 
   def get_config_param(config, param, param_name)
     if config[param].nil?
-      raise "#{param_name.capitalize} cannot nil"
+      raise ArgumentError.new "#{param_name.capitalize} cannot nil"
     end
 
     config[param]
