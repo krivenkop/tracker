@@ -1,5 +1,6 @@
 class Users::SessionsController < ApiController
   include ActionController::MimeResponds
+  include Devise::Controllers::SignInOut
 
   before_action :check_refresh_token, only: [:update_access_token, :destroy]
   before_action :authorize_jwt, only: [:verify_access_token]
@@ -11,6 +12,8 @@ class Users::SessionsController < ApiController
     end
 
     jwt_auth = JwtAuth.create
+    # warden.authenticate!({ scope: :user })
+    sign_in(:user, user)
     render json: jwt_auth.authenticate(@user)
   end
 
@@ -26,6 +29,7 @@ class Users::SessionsController < ApiController
   end
 
   def destroy
+    sign_out(@user)
     @refresh_token.destroy
     head :ok
   end

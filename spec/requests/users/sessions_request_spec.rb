@@ -23,7 +23,7 @@ RSpec.describe Users::SessionsController, type: :request do
 
       it 'returns right jwt access token', post_login: true do
         jwt_auth = JwtAuth.create
-        valid_access_token = jwt_auth.access_token({ user: user.as_json })
+        valid_access_token = jwt_auth.access_token({ user: user.reload.as_json })
 
         expect(response).to have_http_status(:ok)
         expect(JSON.parse(response.body)['access']).to eq valid_access_token
