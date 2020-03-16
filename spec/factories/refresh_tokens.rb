@@ -12,7 +12,7 @@
 FactoryBot.define do
   factory :refresh_token do
     token { "test_token" }
-    expires_on { "2020-05-15 13:34:53" }
+    expires_on { Time.now + 3.months }
     user
 
     trait :expires_on_now do
