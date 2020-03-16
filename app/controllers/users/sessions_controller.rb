@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
-
 class Users::SessionsController < ApiController
   include ActionController::MimeResponds
 
   before_action :check_refresh_token, only: [:update_access_token, :destroy]
+  before_action :authorize_jwt, only: [:verify_access_token]
 
   def create
     unless verify_user_data(user_params)
@@ -29,6 +27,10 @@ class Users::SessionsController < ApiController
 
   def destroy
     @refresh_token.destroy
+    head :ok
+  end
+
+  def verify_access_token
     head :ok
   end
 

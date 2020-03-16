@@ -36,6 +36,10 @@ class JwtAuth
     )
   end
 
+  def verify_access_token(access_token)
+    JWT.decode(access_token, secret, true, { algorithm: algorithm })
+  end
+
   def authenticate(user)
     refresh_token = RefreshToken.create({
       token: SecureRandom.uuid,
