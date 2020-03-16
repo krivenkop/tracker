@@ -21,11 +21,7 @@ RSpec.describe Users::SessionsController, type: :request do
       end
 
       it 'returns right jwt access token', post_login: true do
-        jwt_auth = JwtAuth.new(
-            secret: Rails.application.credentials.secret_key_base,
-            refresh_lifetime: 48.hours,
-            access_lifetime: 30.minutes
-        )
+        jwt_auth = JwtAuth.create
         valid_access_token = jwt_auth.access_token({ user: user.as_json })
 
         expect(response).to have_http_status(:ok)
@@ -46,7 +42,42 @@ RSpec.describe Users::SessionsController, type: :request do
         post user_session_url, params: { user: another_user_params }
       end
 
-      it 'returns unauthorized error' do
+      it 'returns forbidden error' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe 'POST /update-access-token' do
+    let(:user) { create :user }
+
+    context 'refresh token is valid' do
+      context 'refresh token is not expired' do
+        let(:refresh_token) { create :refresh_token }
+        before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
+
+        it 'should return new valid access token' do
+          jwt_auth = JwtAuth.create
+          valid_access_token = jwt_auth.access_token({ user: refresh_token.user.as_json })
+
+          expect(JSON.parse(response.body)['access']).to eq valid_access_token
+        end
+      end
+
+      context 'refresh token is expired' do
+        let(:refresh_token) { create :refresh_token, :skips_validations, :expires_on_now }
+        before { post update_access_token_url, params: { refresh_token: refresh_token.token } }
+
+        it 'should return unauthorized error' do
+          expect(response).to have_http_status(:unauthorized)
+        end
+      end
+    end
+
+    context 'refresh token is invalid' do
+      before { post update_access_token_url, params: { refresh_token: 'invalid_refresh_token' } }
+
+      it 'should return forbidden error' do
         expect(response).to have_http_status(:forbidden)
       end
     end

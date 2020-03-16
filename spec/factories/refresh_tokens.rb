@@ -18,5 +18,9 @@ FactoryBot.define do
     trait :expires_on_now do
       expires_on { DateTime.now }
     end
+
+    trait :skips_validations do
+      to_create {|instance| instance.save(validate: false) }
+    end
   end
 end
