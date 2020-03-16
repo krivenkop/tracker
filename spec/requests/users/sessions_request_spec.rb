@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'securerandom'
 
 RSpec.describe Users::SessionsController, type: :request do
 
@@ -108,6 +109,27 @@ RSpec.describe Users::SessionsController, type: :request do
 
       it 'should return forbidden error' do
         expect(response).to have_http_status(:forbidden)
+      end
+    end
+  end
+
+  describe 'POST /verify-access-token' do
+    let(:user) { create :user }
+
+    context 'when access token is invalid' do
+      before { post verify_access_token_url, params: { access_token: 'invalid_access_token' } }
+
+      it 'should return unauthorized error' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when access token is valid' do
+      let(:access_token) { JwtAuth.create.access_token({ user: user }) }
+
+      it 'should return status 200' do
+        post verify_access_token_url, params: { access_token: access_token }
+        expect(response).to have_http_status(:ok)
       end
     end
   end
