@@ -9,6 +9,10 @@ export default function configureStore(initialState = {}) {
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(rootReducer, initialState, applyMiddleware(sagaMiddleware, logger));
 
+  store.subscribe(() => {
+    localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+  });
+
   sagaMiddleware.run(rootNotificationsSaga);
 
   return store;
