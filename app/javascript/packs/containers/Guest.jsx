@@ -5,7 +5,7 @@ import {
   Route,
 } from 'react-router-dom';
 
-import Header from '../components/Header';
+import GuestHeader from '../components/GuestHeader';
 import Login from '../components/pages/Login';
 import Register from '../components/pages/Register';
 
@@ -13,7 +13,7 @@ class Guest extends React.Component {
   render = () => {
     window.addNotification = this.props.addNotification;
     return (<Router>
-      <Header/>
+      <GuestHeader/>
 
       <Switch>
         <Route path="/register">
