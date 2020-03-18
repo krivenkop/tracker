@@ -3,6 +3,15 @@
   height: $header-height
   align-items: center
 
+  &--mini
+    height: $header-height-mini
+    line-height: $header-height-mini
+
+  &--user
+    background-color: #fff
+    font-size: 14px
+    color: #333333
+
   &__logo
     font-size: 36px
     color: #333333
@@ -14,3 +23,67 @@
     justify-content: flex-end
     align-items: stretch
     height: 100%
+
+.profile-header
+  position: relative
+
+  &__mnu
+    top: $header-height-mini
+    right: 0
+    position: absolute
+
+    &:after
+      content: ''
+      position: absolute
+      top: -10px
+      right: 80px
+      transform: translateX(-50%)
+      width: 0
+      height: 0
+      border-left: 10px solid transparent
+      border-right: 10px solid transparent
+      border-bottom: 10px solid #ffffff
+
+  &__open-mnu
+    background: none
+    border: none
+    display: block
+    height: 100%
+    width: 200px
+    text-align: center
+    cursor: pointer
+    outline: none
+    transition: all 0.4s linear
+    color: #333333
+
+    &:hover
+      background-color: lighten($accent-blue, 35%)
+      transition: all 0.4s linear
+
+
+.profile-mnu
+  display: flex
+  flex-direction: column
+  list-style-type: none
+  margin: 0
+  padding: 0
+  border-top: 10px solid $homepage-bg-color
+  background-color: #ffffff
+  width: 300px
+
+  &--hidden
+    display: none
+
+  &__item
+    padding: 5px 10px
+    transition: all 0.4s linear
+    text-decoration: none
+    font-size: 14px
+    text-align: right
+    color: #333333
+    display: block
+    width: 100%
+
+    &:hover
+      background-color: lighten($accent-blue, 40%)
+      transition: all 0.4s linear
