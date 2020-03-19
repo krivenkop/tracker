@@ -44,14 +44,8 @@ export default (props) => {
 
       const auth = new Authentication(res.data);
 
-      props.authActions.updateAccessToken({
-        token: auth.accessToken,
-        header: auth.accessHeader,
-      });
-      props.authActions.updateRefreshToken({
-        token: auth.refreshToken,
-        expiredOn: auth.refreshExpires,
-      });
+      props.authActions.updateAccessToken({ access: res.data.access });
+      props.authActions.updateRefreshToken({ refresh: res.data.refresh });
       props.authActions.updateUserPayload({
         user: auth.accessPayload,
       });
