@@ -1,0 +1,45 @@
+.sidebar
+  width: $sidebar-width
+  height: 100%
+  left: -$sidebar-width
+  top: 0
+  background-color: #fff
+  transition: all 0.4s
+  position: fixed
+  box-shadow: 3px 0px 3px 0px #999999
+  z-index: 2
+  padding: 20px
+
+  &--opened
+    left: 0
+    transition: all 0.4s
+
+  &__toggle-opened
+    position: absolute
+    border: none
+    padding: 7px
+    background-color: #fff
+    left: $sidebar-width
+    top: 40%
+    transform: translateY(-50%)
+    z-index: 1
+    cursor: pointer
+
+  &__logo-link
+    text-decoration: none
+
+  &__logo
+    display: block
+    font-size: 36px
+    color: #333333
+    font-family: 'Poppins', sans-serif
+    text-decoration: none
+    text-align: center
+    margin-bottom: 40px
+
+.page
+  transition: all 0.4s
+
+  &--with-sidebar
+    margin-left: $sidebar-width
+    transition: all 0.4s
