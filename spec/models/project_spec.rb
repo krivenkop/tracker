@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id          :bigint           not null, primary key
+#  title       :string(255)      not null
+#  slug        :string(255)      not null
+#  color       :string(255)      not null
+#  description :text(65535)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe Project, type: :model do
