@@ -20,7 +20,7 @@ RSpec.describe Project, type: :model do
     expect(project.errors.messages[:title]).not_to be_empty
   end
 
-  it 'should validate presence of title' do
+  it 'should validate presence of color' do
     project = build :project, :empty_color
     project.save
 
