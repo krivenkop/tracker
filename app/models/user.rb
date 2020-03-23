@@ -17,9 +17,17 @@
 #  updated_at             :datetime         not null
 #
 class User < ApplicationRecord
+  include ActiveModel::Serializers
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :trackable
+
+  has_and_belongs_to_many :projects
+
+  def attributes
+    {id: nil, email: nil}
+  end
 end

@@ -14,6 +14,6 @@ class ApiController < ActionController::API
 
     head :unauthorized and return unless access_token_data
 
-    @user = access_token_data[0][:user]
+    @user = User.find access_token_data[0]["user"]["id"]
   end
 end

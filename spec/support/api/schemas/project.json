@@ -1,0 +1,16 @@
+{
+  "title": "string",
+  "description": "string",
+  "slug": {
+    "type": "string",
+    "pattern": "[a-z0-9]+(?:_[a-z0-9]+)*_\\d{10}"
+  },
+  "color": {
+    "type": "string",
+    "pattern": "/^#\\w{3,6}|\\d{3,6}$/i"
+  },
+  "users": {
+    "type": "array",
+    "optional": true
+  }
+}

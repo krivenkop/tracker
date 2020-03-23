@@ -30,5 +30,17 @@ FactoryBot.define do
     sequence :email do |n|
       "person#{n}@example.com"
     end
+
+    trait 'with_projects' do
+      after :create do |user|
+        create_list :project, 3, users: [user]
+      end
+    end
+
+    trait 'with_project' do
+      after :create do |user|
+        create :project, users: [user]
+      end
+    end
   end
 end

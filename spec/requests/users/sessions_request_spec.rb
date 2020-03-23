@@ -125,7 +125,7 @@ RSpec.describe Users::SessionsController, type: :request do
     end
 
     context 'when access token is valid' do
-      let(:access_token) { JwtAuth.create.access_token({ user: user }) }
+      let(:access_token) { JwtAuth.create.access_token({ user: user.as_json }) }
 
       it 'should return status 200' do
         post verify_access_token_url, params: { access_token: access_token }
