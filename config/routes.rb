@@ -13,5 +13,14 @@ Rails.application.routes.draw do
 
 
   root to: 'static#home'
+
+  namespace :api do
+    namespace :v1 do
+      constraints(slug: /[a-z0-9]+(?:_[a-z0-9]+)*_\d{10}/) do
+        resources :projects, except: [:new, :edit], param: :slug
+      end
+    end
+  end
+
   get '*path' => 'static#home'
 end
