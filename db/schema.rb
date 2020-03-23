@@ -29,6 +29,11 @@ ActiveRecord::Schema.define(version: 2020_03_19_115802) do
     t.index ["slug"], name: "index_projects_on_slug", unique: true
   end
 
+  create_table "projects_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "project_id", null: false
+  end
+
   create_table "refresh_tokens", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "token", null: false
     t.datetime "expires_on", null: false
@@ -56,14 +61,5 @@ ActiveRecord::Schema.define(version: 2020_03_19_115802) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "users_projects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "project_id", null: false
-    t.index ["project_id"], name: "index_users_projects_on_project_id"
-    t.index ["user_id"], name: "index_users_projects_on_user_id"
-  end
-
   add_foreign_key "refresh_tokens", "users"
-  add_foreign_key "users_projects", "projects"
-  add_foreign_key "users_projects", "users"
 end

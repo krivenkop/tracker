@@ -11,9 +11,6 @@ class CreateProjects < ActiveRecord::Migration[6.0]
 
     add_index :projects, :slug, unique: true
 
-    create_table :users_projects do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :project, null: false, foreign_key: true
-    end
+    create_join_table :users, :projects
   end
 end
