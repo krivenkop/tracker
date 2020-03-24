@@ -26,7 +26,7 @@ class User < ApplicationRecord
          :trackable
 
   has_and_belongs_to_many :projects
-  has_and_belongs_to_many :tasks
+  has_and_belongs_to_many :assigned_tasks, join_table: :users_tasks, model_name: :Task
 
   def attributes
     {id: nil, email: nil}
