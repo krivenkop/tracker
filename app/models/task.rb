@@ -16,6 +16,7 @@ class Task < ApplicationRecord
   include SlugHelper
 
   has_and_belongs_to_many :users
+  belongs_to :project
 
   validates :title, presence: true
   validates :slug, presence: true
