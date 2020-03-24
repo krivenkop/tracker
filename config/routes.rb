@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       constraints(slug: /[a-z0-9]+(?:_[a-z0-9]+)*_\d{10}/) do
-        resources :projects, except: [:new, :edit], param: :slug
+        resources :projects, except: [:new, :edit], param: :slug do
+          resources :tasks, except: [:new, :edit], param: :slug
+        end
       end
     end
   end

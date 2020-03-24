@@ -31,15 +31,33 @@ FactoryBot.define do
       "person#{n}@example.com"
     end
 
-    trait 'with_projects' do
+    trait :with_projects do
       after :create do |user|
         create_list :project, 3, users: [user]
       end
     end
 
-    trait 'with_project' do
+    trait :with_project do
       after :create do |user|
         create :project, users: [user]
+      end
+    end
+
+    trait :with_projects_and_tasks do
+      after :create do |user|
+        create_list :project, 3, :with_tasks, users: [user]
+      end
+    end
+
+    trait :with_project_and_task do
+      after :create do |user|
+        create :project, :with_task, users: [user]
+      end
+    end
+
+    trait :with_project_and_tasks do
+      after :create do |user|
+        create :project, :with_tasks, users: [user]
       end
     end
   end

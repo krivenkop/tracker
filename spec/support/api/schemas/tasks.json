@@ -1,0 +1,44 @@
+{
+  "type": "array",
+  "items": [
+    {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "slug",
+        "color"
+      ],
+      "fields": {
+        "title": "string",
+        "description": "string",
+        "slug": {
+          "type": "string",
+          "pattern": "[a-z0-9]+(?:_[a-z0-9]+)*_\\d{10}"
+        },
+        "end_date": {
+          "type": "string",
+          "optional": true
+        },
+        "status": {
+          "type": "string",
+          "enum": ["new", "in_progress", "finished"],
+          "optional": true
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "normal", "high"],
+          "optional": true
+        },
+        "assigned_users": {
+          "type": "array",
+          "optional": true
+        },
+        "project": {
+          "type": "object",
+          "optional": true
+        }
+      }
+    }
+  ]
+}
