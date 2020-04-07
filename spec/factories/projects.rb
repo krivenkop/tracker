@@ -33,5 +33,17 @@ FactoryBot.define do
       description { "" }
       color { "" }
     end
+
+    trait :with_task do
+      after :create do |project|
+        create :task, project: project
+      end
+    end
+
+    trait 'with_tasks' do
+      after :create do |project|
+        create_list :task, 3, project: project
+      end
+    end
   end
 end

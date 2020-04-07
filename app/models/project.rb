@@ -12,8 +12,10 @@
 #
 class Project < ApplicationRecord
   include ActiveModel::Serializers::JSON
+  include SlugHelper
 
   has_and_belongs_to_many :users
+  has_many :tasks
 
   validates :title, presence: true
   validates :color, presence: true
@@ -35,13 +37,5 @@ class Project < ApplicationRecord
     unless HEX_REGEX === color
       errors.add(:color, "Color must be a valid HEX")
     end
-  end
-
-  def generate_slug
-    self.slug = "#{self.title.parameterize.underscore.slice(0, 15)}_#{generate_random_nums_for_slug}"
-  end
-
-  def generate_random_nums_for_slug
-    10.times.map { rand(0..9) }.join
   end
 end
