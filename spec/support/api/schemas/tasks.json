@@ -6,8 +6,7 @@
       "required": [
         "title",
         "description",
-        "slug",
-        "color"
+        "slug"
       ],
       "fields": {
         "title": "string",

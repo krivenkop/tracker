@@ -66,6 +66,14 @@ RSpec.describe "Api::V1::Tasks", type: :request do
     end
 
     context 'when task is not related to project' do
+      let(:user) { create :user }
+      let(:project) { create :project, :with_task }
+      let(:task) { project.tasks.first }
+      let(:access_token) do
+        jwt = JwtAuth.create
+        jwt.access_token({user: user.as_json})
+      end
+
       before do
         get(
             api_v1_project_task_url(project.slug, task.slug),
@@ -99,6 +107,8 @@ RSpec.describe "Api::V1::Tasks", type: :request do
     end
 
     context 'when task params is valid' do
+      let(:user) { create :user, :with_project }
+      let(:project) { user.projects.first }
       let(:task_params) { attributes_for :task }
 
       it 'should return 201 status code' do
@@ -167,16 +177,9 @@ RSpec.describe "Api::V1::Tasks", type: :request do
     end
   end
 
-  describe "GET /destroy" do
-    it "returns http success" do
-      get "/api/v1/tasks/destroy"
-      expect(response).to have_http_status(:success)
-    end
-  end
-
   describe 'GET /destroy' do
     let(:user) { create :user, :with_project_and_task }
-    let(:project) { create :project, :with_task }
+    let(:project) { user.projects.first }
     let(:task) { project.tasks.first }
 
     let(:access_token) do
@@ -189,7 +192,7 @@ RSpec.describe "Api::V1::Tasks", type: :request do
     end
 
     it 'returns http success' do
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:ok)
     end
   end
 

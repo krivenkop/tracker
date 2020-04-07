@@ -15,7 +15,7 @@
 class Task < ApplicationRecord
   include SlugHelper
 
-  has_and_belongs_to_many :assigned_users, join_table: :users_tasks, model_name: :User
+  has_and_belongs_to_many :assigned_users, join_table: :tasks_users, model_name: :User
   has_many :tasks, through: :project
   belongs_to :project
 
